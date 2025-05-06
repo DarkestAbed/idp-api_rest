@@ -1,34 +1,36 @@
 # hello.py
 
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 app: FastAPI = FastAPI(
     debug=True,
-    title="API REST inicial",
+    title="API de prueba",
     version="0.0.1",
 )
 
 
-class NewUser(BaseModel):
+class UserLogin(BaseModel):
     user: str
     pswd: str
+    email: EmailStr
 
 
 @app.get("/")
 def _():
     return {
-        "message": "Hello World from this API"
+        "message": "Hello World from my first API",
     }
 
 
-@app.post("/users/create")
-def _(payload: NewUser):
+@app.post("/login")
+def _(payload: UserLogin):
     return {
-        "message": f"user {payload.user} created",
+        "message": f"user {payload.user} was successfully created",
         "details": {
             "user_name": payload.user,
-            "user_pass": payload.pswd,
-        },
+            "user_email": payload.email,
+            "user_password": payload.pswd,
+        }
     }
